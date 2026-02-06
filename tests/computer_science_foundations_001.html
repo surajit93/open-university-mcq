@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Computer Science Foundations — Concept 1 – Practice Test</title>
+
+<style>
+:root {
+  --blue: #1e3a8a;
+  --red-bg: #fee2e2;
+  --red-text: #991b1b;
+  --green: #16a34a;
+  --red: #dc2626;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f9fafb;
+  color: #0f172a;
+}
+
+/* HEADER */
+header {
+  background: var(--blue);
+  color: white;
+  padding: 18px 22px;
+  font-size: 24px;
+}
+
+/* DONATION BANNER (Wikipedia style) */
+#donationBanner {
+  background: var(--red-bg);
+  color: var(--red-text);
+  padding: 14px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* CONTENT */
+.container {
+  padding: 22px;
+}
+
+.question {
+  margin-bottom: 22px;
+}
+
+.options label {
+  display: block;
+  margin: 6px 0;
+  cursor: pointer;
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+}
+
+.btn-green {
+  background: var(--green);
+  color: white;
+}
+
+.btn-red {
+  background: var(--red);
+  color: white;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: white;
+  width: 92%;
+  max-width: 520px;
+  border-radius: 10px;
+  padding: 22px;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal small {
+  color: #475569;
+}
+
+.payment-box {
+  margin: 14px 0;
+}
+
+/* HIDE */
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MODAL -->
+<div id="donationModal" class="modal-overlay">
+  <div class="modal">
+    <h2>Please Donate for our Hardwork</h2>
+    <small>Right contribution shows your respect for lesson / dedication</small>
+
+    <p><b>Select payment method:</b></p>
+
+    <button onclick="showGpay()">GPay</button>
+    <button onclick="showPaypal()">PayPal</button>
+
+    <div id="paymentBox" class="payment-box"></div>
+
+    <br/><br/>
+    <button class="btn-green" onclick="confirmPaid()">I Paid</button>
+    <button class="btn-red" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<header>Computer Science Foundations — Concept 1</header>
+
+<div id="donationBanner" onclick="openModal()">
+  Please consider donating before attempting this test.
+</div>
+
+<div class="container">
+  <div id="quiz"></div>
+
+  <button onclick="submitQuiz()">Submit</button>
+  <p id="result"></p>
+</div>
+
+<script>
+const QUESTIONS = [{"q": "What is the primary focus of computer science?", "options": ["Algorithms and data structures", "Computer hardware", "Software development", "Networking"], "answer": 0, "explanation": "Computer science is the study of algorithms and data structures, which are the building blocks of any computer system."}, {"q": "What are the basic components of a computer system?", "options": ["Input, processing, and output", "Algorithms and data structures, software, and hardware", "Input, software, and output", "Processing, hardware, and networking"], "answer": 0, "explanation": "The basic components of a computer system include input, processing, and output."}, {"q": "What is the significance of computer science in modern society?", "options": ["It has limited impact on our daily lives", "It affects many aspects of our lives, from communication and entertainment to healthcare and finance", "It is only relevant to technology enthusiasts", "It has no practical consequences"], "answer": 1, "explanation": "The importance of computer science in modern society cannot be overstated. It affects many aspects of our lives, from communication and entertainment to healthcare and finance."}, {"q": "What is a common misconception about computer science?", "options": ["It is only about technology", "It is only about coding and programming", "It is only about algorithms and data structures", "It is only about software development"], "answer": 1, "explanation": "There are common misconceptions about computer science that need to be debunked. One such misconception is that computer science is only about coding and programming."}, {"q": "What is the impact of computer science on society?", "options": ["It has limited impact", "It affects only technology enthusiasts", "It has significant implications for modern society", "It has no practical consequences"], "answer": 2, "explanation": "In conclusion, computer science is a vital field that has far-reaching implications for modern society."}, {"q": "What are some real-world examples of computer science?", "options": ["Smartphones and social media platforms", "Algorithms and data structures", "Computer hardware and software", "Networking and cybersecurity"], "answer": 0, "explanation": "Real-world examples of computer science include smartphones and social media platforms."}, {"q": "What is the importance of understanding computer science?", "options": ["It is only relevant to technology enthusiasts", "It is essential to appreciate the impact of computer science on various aspects of our lives", "It has no practical consequences", "It is only about coding and programming"], "answer": 1, "explanation": "Understanding computer science is crucial in today's world, where technology plays a vital role in our daily lives."}, {"q": "What are some critical areas that need to be addressed in the context of computer science?", "options": ["Algorithms and data structures, software development, and human-computer interaction", "Security and ethics, algorithms and data structures, and software development", "Networking and cybersecurity, algorithms and data structures, and software development", "Security and ethics, software development, and human-computer interaction"], "answer": 0, "explanation": "However, computer science is a multidisciplinary field that encompasses various aspects, including algorithms, data structures, and human-computer interaction."}, {"q": "What is the role of algorithms and data structures in computer science?", "options": ["They are the building blocks of any computer system", "They are only relevant to software development", "They have no practical consequences", "They are only about coding and programming"], "answer": 0, "explanation": "Computer science is the study of algorithms and data structures, which are the building blocks of any computer system."}, {"q": "What is the significance of human-computer interaction in computer science?", "options": ["It is only relevant to software development", "It is essential to consider the practical consequences of computer science applications", "It has no practical consequences", "It is only about coding and programming"], "answer": 1, "explanation": "However, computer science is a multidisciplinary field that encompasses various aspects, including algorithms, data structures, and human-computer interaction."}];
+
+function openModal() {
+  document.getElementById("donationModal").classList.remove("hidden");
+}
+
+function closeModal() {
+  alert("We have put so much of effort.\n Is this right not show the minimum respect to our work ? \n You think and re-consider.");
+  document.getElementById("donationModal").classList.add("hidden");
+  document.getElementById("donationBanner").style.display = "block";
+}
+
+function confirmPaid() {
+  document.getElementById("donationModal").classList.add("hidden");
+  document.getElementById("donationBanner").style.display = "none";
+}
+
+function showGpay() {
+  document.getElementById("paymentBox").innerHTML =
+    '<p>Scan QR:</p><img src="../payment/gpay/qr.png" width="220"/>';
+}
+
+function showPaypal() {
+  document.getElementById("paymentBox").innerHTML =
+    '<p>PayPal ID: <b>paypal@openuniversitymedia</b></p>';
+}
+
+/* QUIZ */
+function renderQuiz() {
+  let html = "";
+  QUESTIONS.forEach((q, i) => {
+    html += `<div class="question"><b>${{i+1}}. ${{q.q}}</b><div class="options">`;
+    q.options.forEach((o, j) => {
+      html += `<label><input type="radio" name="q${{i}}" value="${{j}}"/> ${{o}}</label>`;
+    });
+    html += "</div></div>";
+  });
+  document.getElementById("quiz").innerHTML = html;
+}
+
+function submitQuiz() {
+  let score = 0;
+  QUESTIONS.forEach((q, i) => {
+    const sel = document.querySelector(`input[name="q${{i}}"]:checked`);
+    if (sel && Number(sel.value) === q.answer) score++;
+  });
+  document.getElementById("result").innerText =
+    `Score: ${{score}} / ${{QUESTIONS.length}}`;
+}
+
+/* INIT */
+renderQuiz();
+openModal();
+</script>
+
+</body>
+</html>
